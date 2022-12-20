@@ -194,7 +194,7 @@ var demographic = {
             type: jsPsychSurveyMultiChoice,
             questions: [
                 {
-                    prompt: "<p>我已经周游了世界92次。</p>",
+                    prompt: "我已经周游了世界92次。",
                     name: 'check1',
                     options: ['合理', '不合理'],
                     required: true,
