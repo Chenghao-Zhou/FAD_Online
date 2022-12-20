@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>FAD-PLUS MAIN html</title>
+    <script src="plugin/jquery/jquery-3.2.1.min.js"></script>
+    <script src="plugin/jspsych-psychophysics-3.3.0/jspsych-dist/dist/jspsych.js"></script>
+    <script src="plugin/jspsych-psychophysics-3.3.0/jspsych-dist/dist/plugin-fullscreen.js"></script>
+    <script src="plugin/jspsych-psychophysics-3.3.0/jspsych-dist/dist/plugin-survey-text.js"></script>
+    <script src="plugin/jspsych-psychophysics-3.3.0/jspsych-dist/dist/plugin-html-button-response.js"></script>
+    <script src="plugin/jspsych-psychophysics-3.3.0/jspsych-dist/dist/plugin-html-keyboard-response.js"></script>
+    <script src="plugin/jspsych-psychophysics-3.3.0/jspsych-dist/dist/plugin-survey-likert.js"></script>
+    <script src="plugin/jspsych-psychophysics-3.3.0/jspsych-dist/dist/plugin-survey-multi-choice.js"></script>
+    <script src="plugin/jspsych-psychophysics-3.3.0/jspsych-dist/dist/plugin-survey-html-form.js"></script>
+    
+
+    <script src="plugin/jspsych-psychophysics-3.3.0/jspsych-dist/dist/plugin-call-function.js"></script>
+
+
+
+    <link href="plugin/jspsych-psychophysics-3.3.0/jspsych-dist/dist/jspsych.css" rel="stylesheet" type="text/css">
+    <script src="stimu/pre_pare.js"></script>
+    <script src="stimu/demographic.js"></script>
+    <script src="stimu/fad_.js"></script>
+    <script src="stimu/BFI_2.js"></script>
+    <script src="stimu/MLOC.js"></script>
+
+    </link>
+</head>
+
+<body>
+    <div id="jspsych-target"></div>
+</body>
+
+<script>
+
+
+
+    var save_url = 'https://github.com/Chenghao-Zhou/PID/blob/main/exp_data/save_data.php'
+    var data_dir = 'exp_data'
+
+
+
+    function upload_data_csv() {
+        jQuery.ajax({
+            type: 'post',
+            cache: false,
+            url: save_url,
+            data: {
+                data_dir: data_dir,
+                file_name: localStorage.subj_ID + '_' + localStorage.subj_name + '_' + stamp() + '.csv', // the file type should be added
+                exp_data: jsPsych.data.get().csv()
+            }
+        });
+    }
+
+    const jsPsych = initJsPsych({
+        show_progress_bar: true,
+        /*on_finish: function(data) {jsPsych.data.displayData('csv')}, */
+        on_data_update: function (data) {
+            data = encodeURI(jsPsych.data.get()); //updates the data file with the most recent trial 
+        },
+        on_finish: function (data) {
+            DOM_target = document.querySelector('#jspsych-content');
+            DOM_target.innerHTML = '<p>实验结束，感谢您的参加。</p>';
+            jsPsych.pluginAPI.cancelAllKeyboardResponses();
+            jsPsych.pluginAPI.clearAllTimeouts();
+            upload_data_csv();
+            jsPsych.data.get().localSave('csv', localStorage.subj_ID + '_' + localStorage.subj_name + '_' + stamp() + '.csv');
+
+
+        },
+    }
+    );
+
+    console.log(`jsPsych Version ${jsPsych.version()}`)
+
+
+    var Likert_5 = ['1', '2', '3', '4', '5'];
+
+
+    
+
+
+
+
+    var timeline_all = [];
+
+    //prepare - no random
+    
+    timeline_all = timeline_all.concat(enterFullscreenMode);
+    timeline_all = timeline_all.concat(subj_id);
+    timeline_all = timeline_all.concat(demographic);
+    timeline_all = timeline_all.concat(fad);
+    timeline_all = timeline_all.concat(bfi);
+    timeline_all = timeline_all.concat(mloc);
+
+    
+
+
+
+
+    jsPsych.run(timeline_all)
+
+
+    localStorage.removeItem(localStorage.subj_ID)
+    localStorage.removeItem(localStorage.subj_name)
+
+
+</script>
+
+</html>
