@@ -26,11 +26,11 @@ var subj_id = {
     type: jsPsychSurveyText,
     questions: [{
         prompt: '请输入您的ID编号',
-        value: 'subj_ID', rows: 1, columns: 50
+        value: 'subj_ID', rows: 1, columns: 25
     },
     {
         prompt: '请输入您的姓名（拼音）',
-        value: 'subj_name', rows: 1, columns: 50
+        value: 'subj_name', rows: 1, columns: 25
     }],
     on_finish: function (data) {
         localStorage.subj_ID = jsPsych.data.getLastTrialData().trials[0]['response']['Q0'];
